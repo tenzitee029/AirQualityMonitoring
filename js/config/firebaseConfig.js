@@ -1,0 +1,1 @@
+export const firebaseURL = "https://air-quality-cacd8-default-rtdb.firebaseio.com/AirQuality.json?auth=TM1l7pzvsnAWU7MfHnY0FsIAGVvso8z604Y4SMTZ";

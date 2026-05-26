@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Giám Sát Không Khí - Nguyễn Nhật Tiến</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>AIR QUALITY MONITORING</h1>
+        <p>Giám sát chất lượng không khí</p>
+    </header>
+
+    <div class="section-title">1. Danh mục giám sát trực tuyến</div>
+    <div class="grid-monitor">
+        <div class="card" style="border-top-color: #ef4444;">
+            <h3>Nhiệt độ</h3>
+            <div class="value" id="txt-temp">--</div>
+            <div class="unit">°C</div>
+        </div>
+        <div class="card" style="border-top-color: #3b82f6;">
+            <h3>Độ ẩm</h3>
+            <div class="value" id="txt-humidity">--</div>
+            <div class="unit">%</div>
+        </div>
+        <div class="card" style="border-top-color: #eab308;">
+            <h3>Khí Gas MQ-2</h3>
+            <div class="value" id="txt-gas">--</div>
+            <div class="unit">ppm</div>
+        </div>
+        <div class="card" style="border-top-color: #a855f7;">
+            <h3>Bụi mịn (PM2.5)</h3>
+            <div class="value" id="txt-dust">--</div>
+            <div class="unit">µg/m³</div>
+        </div>
+    </div>
+
+    <div class="status-bar">
+        <div>Chỉ số IAQ: <strong id="txt-iaq" style="color: var(--primary-blue); font-size: 1.3rem;">--</strong></div>
+        <div>Đánh giá: <span class="badge bg-safe" id="badge-level">SAFE</span></div>
+        <div>Phản hồi quạt: <strong id="txt-fan-status" style="color: #64748b;">TẮT</strong></div>
+    </div>
+
+    <div class="section-title">2. Danh mục chức năng điều khiển & Cấu hình</div>
+    <div class="grid-control">
+        <div class="control-box">
+            <div class="control-row">
+                <h3>Chế độ vận hành hệ thống</h3>
+                <label class="switch">
+                    <input type="checkbox" id="toggle-mode" onchange="switchMode()">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="control-row">
+                <span id="txt-mode-label" style="font-weight: bold; color: var(--primary-blue);">Chế độ: TỰ ĐỘNG (AUTO)</span>
+            </div>
+            <hr style="border: 0; border-top: 1px solid #334155; width: 100%; margin: 5px 0;">
+            <div>
+                <h3 style="margin-bottom: 10px;">Lệnh cưỡng bức quạt</h3>
+                <button id="btn-fan-trigger" class="btn-fan btn-off" onclick="toggleManualFan()" disabled>BẬT QUẠT HỆ THỐNG</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-title">3. Đồ thị xu hướng thời gian thực</div>
+    <div class="chart-box">
+        <canvas id="airQualityChart"></canvas>
+    </div>
+</div>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
