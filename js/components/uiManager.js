@@ -21,31 +21,18 @@ export const uiManager = {
         else if (level === "DANGER") badge.classList.add("bg-danger");
     },
 
-    updateModeUI(isManual) {
+    updateModeUI(mode) {
         const modeLabel = document.getElementById('txt-mode-label');
-        const fanBtn = document.getElementById('btn-fan-trigger');
+        const toggleMode = document.getElementById('toggle-mode');
         
-        if (isManual) {
-            modeLabel.innerText = "Chế độ: THỦ CÔNG (MANUAL)";
-            modeLabel.style.color = "var(--warn-color)";
-            fanBtn.disabled = false;
+        if (mode === "FORCE_ON") {
+            modeLabel.innerText = "Chế độ hiện tại: LUÔN BẬT QUẠT (FORCED ON)";
+            modeLabel.style.color = "var(--safe-color)";
+            if (toggleMode) toggleMode.checked = true;
         } else {
-            modeLabel.innerText = "Chế độ: TỰ ĐỘNG (AUTO)";
+            modeLabel.innerText = "Chế độ hiện tại: TỰ ĐỘNG (AUTO)";
             modeLabel.style.color = "var(--primary-blue)";
-            fanBtn.disabled = true;
-            fanBtn.className = "btn-fan btn-off";
-            fanBtn.innerText = "BẬT QUẠT HỆ THỐNG";
-        }
-    },
-
-    updateManualFanButton(isFanOn) {
-        const fanBtn = document.getElementById('btn-fan-trigger');
-        if (isFanOn) {
-            fanBtn.className = "btn-fan btn-on";
-            fanBtn.innerText = "QUẠT ĐANG BẬT - BẤM ĐỂ TẮT";
-        } else {
-            fanBtn.className = "btn-fan btn-off";
-            fanBtn.innerText = "QUẠT ĐANG TẮT - BẤM ĐỂ BẬT";
+            if (toggleMode) toggleMode.checked = false;
         }
     }
 };
