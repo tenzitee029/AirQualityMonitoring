@@ -14,13 +14,14 @@ export class ChartManager {
                     { label: 'Nhiệt độ (°C)', data: [], borderColor: '#ef4444', backgroundColor: 'transparent', tension: 0.2 },
                     { label: 'Độ ẩm (%)', data: [], borderColor: '#3b82f6', backgroundColor: 'transparent', tension: 0.2 },
                     { label: 'Khí Gas (ppm)', data: [], borderColor: '#eab308', backgroundColor: 'transparent', tension: 0.2 },
-                    { label: 'Bụi mịn (µg/m³)', data: [], borderColor: '#a855f7', backgroundColor: 'transparent', tension: 0.2 }, // <-- Sửa "Bụi mịn (°)" thành "Bụi mịn (µg/m³)"
+                    { label: 'Bụi mịn (µg/m³)', data: [], borderColor: '#a855f7', backgroundColor: 'transparent', tension: 0.2 },
                     { label: 'Chỉ số IAQ', data: [], borderColor: '#2ecc71', backgroundColor: 'transparent', tension: 0.2, borderWidth: 3 }
                 ]
             },
             options: {
                 responsive: true,
-                plugins: { legend: { labels: { color: '#ffffff' } } },
+                maintainAspectRatio: false, // Để biểu đồ fill vừa .chart-box
+                plugins: { legend: { labels: { color: '#94a3b8' } } },
                 scales: {
                     x: { grid: { color: '#334155' }, ticks: { color: '#94a3b8' } },
                     y: { grid: { color: '#334155' }, ticks: { color: '#94a3b8' }, min: 0 }
@@ -45,5 +46,9 @@ export class ChartManager {
         this.chart.data.datasets[3].data.push(data.dust);
         this.chart.data.datasets[4].data.push(data.iaq);
         this.chart.update();
+    }
+
+    getChartInstance() {
+        return this.chart;
     }
 }
