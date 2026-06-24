@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Air Quality Monitoring</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="theme-dark font-md">
+
+<div class="app-layout">
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2>AIR DASHBOARD</h2>
+            <button id="btn-toggle-sidebar">☰</button>
+        </div>
+        <nav class="sidebar-nav">
+            <button class="nav-btn active" data-target="view-monitor">Giám sát</button>
+            <button class="nav-btn" data-target="view-history">Lịch sử<span id="alert-badge">0</span></button>
+            <button class="nav-btn" data-target="view-devices">Thiết bị</button>
+            <button class="nav-btn" data-target="view-settings">Cài đặt</button>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        
+        <section id="view-monitor" class="view-section active">
+            <header>
+                <h1>GIÁM SÁT TRỰC TUYẾN</h1>
+                <p>Hệ thống giám sát chất lượng không khí thời gian thực</p>
+            </header>
+            
+            <div class="grid-monitor">
+                <div class="card" style="border-top-color: #ef4444;">
+                    <h3>Nhiệt độ</h3>
+                    <div class="value" id="txt-temp">--</div>
+                    <div class="unit">°C</div>
+                </div>
+                <div class="card" style="border-top-color: #3b82f6;">
+                    <h3>Độ ẩm</h3>
+                    <div class="value" id="txt-humidity">--</div>
+                    <div class="unit">%</div>
+                </div>
+                <div class="card" style="border-top-color: #eab308;">
+                    <h3>Khí Gas MQ-2</h3>
+                    <div class="value" id="txt-gas">--</div>
+                    <div class="unit">ppm</div>
+                </div>
+                <div class="card" style="border-top-color: #a855f7;">
+                    <h3>Bụi mịn (PM2.5)</h3>
+                    <div class="value" id="txt-dust">--</div>
+                    <div class="unit">µg/m³</div>
+                </div>
+            </div>
+
+            <div class="status-bar">
+                <div>Chỉ số IAQ: <strong id="txt-iaq" style="color: var(--primary-blue); font-size: 1.3rem;">--</strong></div>
+                <div>Đánh giá: <span class="badge bg-safe" id="badge-level">SAFE</span></div>
+                <div>Phản hồi quạt: <strong id="txt-fan-status" style="color: #64748b;">TẮT</strong></div>
+            </div>
+
+            <div class="section-title">Đồ thị xu hướng thời gian thực</div>
+            <div class="chart-filters" style="margin-bottom: 15px; background: var(--card-bg); padding: 10px; border-radius: 8px;">
+                <strong>Hiển thị: </strong>
+                <label style="margin-right: 15px; cursor: pointer;"><input type="checkbox" checked onchange="toggleChartData(0)"> Nhiệt độ</label>
+                <label style="margin-right: 15px; cursor: pointer;"><input type="checkbox" checked onchange="toggleChartData(1)"> Độ ẩm</label>
+                <label style="margin-right: 15px; cursor: pointer;"><input type="checkbox" checked onchange="toggleChartData(2)"> Gas</label>
+                <label style="margin-right: 15px; cursor: pointer;"><input type="checkbox" checked onchange="toggleChartData(3)"> Bụi</label>
+                <label style="cursor: pointer;"><input type="checkbox" checked onchange="toggleChartData(4)"> IAQ</label>
+            </div>
+            <div class="chart-box">
+                <canvas id="airQualityChart"></canvas>
+            </div>
+        </section>
+
+        <section id="view-history" class="view-section">
+            <header>
+                <h1>LỊCH SỬ HỆ THỐNG</h1>
+            </header>
+
+            <div class="history-tabs">
+                <button id="tab-measurements"
+                        class="history-tab active"
+                        onclick="showHistoryTab('measurements')">
+                    Lịch sử đo
+                </button>
+
+                <button id="tab-alerts"
+                        class="history-tab"
+                        onclick="showHistoryTab('alerts')">
+                    Lịch sử cảnh báo
+                </button>
+            </div>
+
+            <div id="history-measurements-panel">
+                <div class="daily-statistics">
+                    <div class="daily-statistics-header">
+                        <h3>THỐNG KÊ HÔM NAY</h3>
+                        <span id="statistics-period">Từ 00:00 đến hiện tại</span>
+                    </div>
+
+                    <div class="statistics-grid">
+                        <div class="statistics-card">
+                            <span>Nhiệt độ trung bình</span>
+                            <strong id="stat-temp">-- °C</strong>
+                            <small id="stat-temp-range">Min -- | Max --</small>
+                        </div>
+
+                        <div class="statistics-card">
+                            <span>Độ ẩm trung bình</span>
+                            <strong id="stat-humidity">-- %</strong>
+                            <small id="stat-humidity-range">Min -- | Max --</small>
+                        </div>
+
+                        <div class="statistics-card">
+                            <span>Gas trung bình</span>
+                            <strong id="stat-gas">-- ppm</strong>
+                            <small id="stat-gas-range">Min -- | Max --</small>
+                        </div>
+
+                        <div class="statistics-card">
+                            <span>Bụi trung bình</span>
+                            <strong id="stat-dust">-- µg/m³</strong>
+                            <small id="stat-dust-range">Min -- | Max --</small>
+                        </div>
+
+                        <div class="statistics-card">
+                            <span>IAQ trung bình</span>
+                            <strong id="stat-iaq">--</strong>
+                            <small id="stat-iaq-range">Min -- | Max --</small>
+                        </div>
+
+                        <div class="statistics-card">
+                            <span>Số lần đo</span>
+                            <strong id="stat-count">0</strong>
+                            <small id="stat-levels">SAFE 0 | WARN 0 | DANGER 0</small>
+                        </div>
+                    </div>
+                </div>
+                <ul id="measurement-history-list" class="history-list">
+                    <li>Chưa có dữ liệu đo.</li>
+                </ul>
+            </div>
+
+            <div id="history-alerts-panel" hidden>
+                <ul id="history-list" class="history-list">
+                    <li>Chưa có cảnh báo.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="view-devices" class="view-section">
+            <header>
+                <h1>QUẢN LÝ THIẾT BỊ</h1>
+            </header>
+            <div class="grid-control">
+                <div class="control-box">
+                    <div class="control-row">
+                        <h3>Chế độ vận hành Quạt</h3>
+                        <label class="switch">
+                            <input type="checkbox" id="toggle-mode" onchange="switchMode()">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <span id="txt-mode-label" style="font-weight: bold; color: var(--primary-blue); font-size: 1.1rem; margin-top: 10px; display: block;">Chế độ hiện tại: TỰ ĐỘNG (AUTO)</span>
+                    <p style="font-size: 0.85rem; color: #64748b; margin: 5px 0 0 0;">
+                        * Gạt công tắc để kích hoạt chế độ cưỡng bức quạt luôn bật.
+                    </p>
+                </div>
+                <div class="control-box">
+                    <h3>Trạng thái kết nối</h3>
+                    <div id="device-status" style="font-size: 1.1rem; font-weight: bold; margin-top: 10px;">Đang khởi tạo...</div>
+                </div>
+            </div>
+        </section>
+
+        
+
+        <section id="view-settings" class="view-section">
+            <header>
+                <h1>CÀI ĐẶT HỆ THỐNG</h1>
+            </header>
+            <div class="control-box">
+                <div class="control-row">
+                    <h3>Giao diện Sáng/Tối</h3>
+                    <label class="switch">
+                        <input type="checkbox" id="toggle-theme" onchange="toggleTheme()">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="control-row" style="margin-top: 25px;">
+                    <h3>Kích thước chữ</h3>
+                    <select id="font-size-select" onchange="changeFontSize()" class="input-threshold" style="width: 150px;">
+                        <option value="font-sm">Nhỏ</option>
+                        <option value="font-md" selected>Vừa</option>
+                        <option value="font-lg">Lớn</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
