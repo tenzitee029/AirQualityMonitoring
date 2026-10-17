@@ -20,6 +20,6 @@ Hệ thống được xây dựng theo mô hình Single Page Application (SPA) t
 * **Frontend:** HTML5, CSS3 (Biến CSS tùy biến giao diện), thuần JavaScript (ES6 Modules - cấu trúc dạng cấu phần: `uiManager`, `chartManager`, `aiService`).
 * **Thư viện đồ thị:** `Chart.js` (Vẽ biểu đồ đường đa trục realtime trực quan).
 * **Cloud Database Endpoint:** Hệ thống đồng bộ dữ liệu thời gian thực thông qua **Firebase Realtime Database**. 
-  * *Cơ sở dữ liệu chính thức của dự án:* `https://air-quality-cacd8-default-rtdb.firebaseio.com/AirQuality`
-* **Wokwi mô phỏng:** `https://wokwi.com/projects/466606471206640641`
+  * *Cơ sở dữ liệu chính thức của dự án:* [Firebase Endpoint](https://air-quality-cacd8-default-rtdb.firebaseio.com/AirQuality)
+* **Wokwi mô phỏng:** [Xem mô phỏng trên Wokwi](https://wokwi.com/projects/466606471206640641)
 ---
